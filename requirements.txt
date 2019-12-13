@@ -1,0 +1,4 @@
+jupyterlab==1.2
+ipywidgets>=7.5
+pandas
+jupyter labextension install jupyterlab-plotly@1.4.0
