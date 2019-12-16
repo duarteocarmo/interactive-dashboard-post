@@ -1,5 +1,3 @@
-
-
 # interactive-dashboard-post
 
 A blog post for PBP
@@ -51,10 +49,6 @@ If the plotly express plots are not showing then try:
 ```bash
 (env) $ jupyter labextension install @jupyterlab/plotly-extension
 ```
-
-You might need to install [nodejs](https://nodejs.org/en/) to run them. 
-
-
 
 ## Launching the dashboard
 
