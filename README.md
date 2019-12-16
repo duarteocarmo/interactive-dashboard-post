@@ -49,7 +49,7 @@ It should launch automatically, if not, navigate to http://localhost:8888/lab
 If the plotly express plots are not showing then try:
 
 ```bash
-(env) $ jupyter labextension uninstall @jupyterlab/plotly-extension
+(env) $ jupyter labextension install @jupyterlab/plotly-extension
 ```
 
 You might need to install [nodejs](https://nodejs.org/en/) to run them. 
