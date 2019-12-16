@@ -1,4 +1,7 @@
-jupyterlab==1.2
-ipywidgets>=7.5
+jupyterlab
+requests
 pandas
-jupyter labextension install jupyterlab-plotly@1.4.0
+textblob
+plotly-express
+voila
+
