@@ -50,6 +50,9 @@ If the plotly express plots are not showing then try:
 (env) $ jupyter labextension install @jupyterlab/plotly-extension
 ```
 
+If you still have problems, follow [these instructions](https://plot.ly/python/getting-started/#jupyterlab-support-python-35).
+
+
 ## Launching the dashboard
 
 Follow the instructions above, but instead of launching jupyter lab: 
