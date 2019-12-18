@@ -1,14 +1,10 @@
 # Creating live dashboards from Jupyter Notebooks
 
-# Part 1: The data
-
-
+[TOC]
 
 ### About the author
 
 Hey everyone! My name is [Duarte O.Carmo](https://duarteocarmo.com) and I'm a Consultant working at [Jabra](https://jabra.com) that loves working with python and data. Make sure to visit my website if you want to find more about me :smile: 
-
-
 
 1. The overall goal
 2. Getting the data: pushshift
@@ -19,8 +15,6 @@ Hey everyone! My name is [Duarte O.Carmo](https://duarteocarmo.com) and I'm a Co
    3. Sentiment timeline
 4. Using voila
 5. Deploying the solution
-
-
 
 ### 1. The Goal
 
@@ -90,11 +84,9 @@ get_pushshift_data(data_type="comment",  	# give me comments
 
 returns the json response. Pretty sweet right? 
 
- 
-
 ### 3. Analyzing the data
 
-#### 3.1. In what subreddits does the word 'python' appear more?
+#### 3.1. In what subreddits does the word 'python' appear more?introducing [Plotly Express](https://plot.ly/python/plotly-express/)
 
 To answer the above question, we start by getting the data with our function:
 
@@ -108,23 +100,17 @@ data = get_pushshift_data(data_type="comment",
 
 The `aggs` keyword asks pushshift to return an aggregation into subreddits, which basically means, group the results by subreddit. ([read about it in the documentation](https://github.com/pushshift/api#using-the-subreddit-aggregation))
 
-
-
 Since the json response is pretty nested, we'll need to navigate a bit inside of the dictionary. 
 
 ```python
 data = data.get("aggs").get("subreddit")
 ```
 
-
-
 And we transform the list of dictionaries returned into a pandas DataFrame, and get the top 10. 
 
 ```python
 df = pandas.DataFrame.from_records(data)[0:10]
 ```
-
-
 
 Here's what our dataframe looks like: 
 
@@ -137,15 +123,11 @@ Here's what our dataframe looks like:
 
 These are the names of the subreddits the word `python` appears more in their comments :tada::tada:!
 
-
-
 Let's plot our results with the great [ploty express](https://nbviewer.jupyter.org/github/plotly/plotly_express/blob/gh-pages/walkthrough.ipynb) library. Plotly express is great, in my opinion if you want to:
 
 - create figures quickly. :bullettrain_front:
 - create figures that are a bit more interactive than [matplotlib](https://matplotlib.org/). :raised_hand_with_fingers_splayed:
 - don't mind a bit more installation and (imo) a bit worse documentation. :sweat:
-
-
 
 Here's all the code you need:
 
@@ -189,8 +171,6 @@ df.permalink = "https://reddit.com" + df.permalink.astype(str)
 df.style.format({'permalink': make_clickable})
 ```
 
-
-
 **sidenote**: to make a DataFrame column clickable you can can apply the following function to it:
 
  ```python
@@ -202,8 +182,6 @@ def make_clickable(val):
  ```
 
 **end of sidenote**
-
-
 
 The above code will return the top 10 most upvoted comments of the last 7 days:
 
@@ -220,17 +198,13 @@ The above code will return the top 10 most upvoted comments of the last 7 days:
 | 8    | aspiringtobeme   | gifsthatkeepongiving | 19    | Amazing. Brought [this Monty Python clip](https://... | [Link](https://reddit.com/r/gifsthatkeepongiving/comments/eaqml0/watch_a_new_kid_every_time/faw7ne5/) |
 | 9    | CrimsonSpooker   | TwoBestFriendsPlay   | 19    | “Why can’t Three Houses be gritty and “realistic” ... | [Link](https://reddit.com/r/TwoBestFriendsPlay/comments/eb3f6m/i_dont_think_there_are_too_many_of_these_but/fb2nisj/) |
 
-
-
 And you can click the link column to be taken right into the comment. Hooray! :tada: 
 
-
-
-#### 3.3. What is the sentiment in /r/python across time? 
+#### 3.3. What is the sentiment in /r/python across time? introducing [TextBlob](https://textblob.readthedocs.io/en/dev/) 
 
 Alright, the final one is a bit more complicated. We want to see the sentiment in the [/r/python](https://reddit.com/r/python) subreddit in some sort of time line. 
 
-First, we already now how to retrieve the most upvoted comments of the past 2 days:
+First, we already now how to retrieve the most up voted comments of the past 2 days:
 
 ```python
 # get the data with our function
@@ -247,8 +221,6 @@ columns_of_interest = ["author", "body", "created_utc", "score", "permalink"]
 # transform the response into a dataframe
 df = pandas.DataFrame.from_records(data)[columns_of_interest]
 ```
-
-
 
 This gives us a pandas DataFrame with the columns specified in `columns_of_interest`. But how the hell do we get the sentiment of every comment? 
 
@@ -272,9 +244,84 @@ print(textblob.TextBlob(sentence2).sentiment)
 
 Read more about the library [here](https://textblob.readthedocs.io/en/dev/). 
 
+Now that we know how to extract sentiment from a piece of text, we can easily create some other columns for our DataFrame of comments:
 
+```python
+# create a column with sentiment polarity
+df["sentiment_polarity"] = df.apply(lambda row: textblob.TextBlob(row["body"]).sentiment.polarity, axis=1)
 
- 
+# create a column with sentiment subjectivity
+df["sentiment_subjectivity"] = df.apply(lambda row: textblob.TextBlob(row["body"]).sentiment.subjectivity, axis=1)
+
+# create a column with 'positive' or 'negative' depending on sentiment_polarity
+df["sentiment"] = df.apply(lambda row: "positive" if row["sentiment_polarity"] >= 0 else "negative", axis=1)
+
+# create a column with a text preview that shows the first 50 characters
+df["preview"] = df["body"].str[0:50]
+
+# take the created_utc parameter and tranform it into a datetime column
+df["date"] = pandas.to_datetime(df['created_utc'],unit='s')
+
+```
+
+Finally, it's time to plot our figure with the help of Plotly Express:
+
+```python
+px.scatter(df, x="date", # date on the x axis
+               y="sentiment_polarity", # sentiment on the y axis
+               hover_data=["author", "permalink", "preview"], # data to show on hover
+               color_discrete_sequence=["lightseagreen", "indianred"], # colors to use
+               color="sentiment", # what should the color depend on? 
+               size="score", # the more votes, the bigger the circle
+               size_max=10, # not too big 
+               labels={"sentiment_polarity": "Comment positivity", "date": "Date comment was posted"}, # axis names
+               title=f"Comment sentiment in /r/python for the past 48h", # title of figure
+          )
+```
+
+And here's the output!
+
+![](figure_2.png)
+
+In this view, we can see the comments made in /r/python in the last 48 hours. We can see that most comments are rather on the positive side, but some are also negative. In your own notebook you'll notice that you can hover over the comments and read the preview to see why they were classified as negative or positive. 
+
+Cool thing here is that if you run the same script tomorrow, you'll get a different output. 
+
+So how can we have this in some place that "automatically" is updated whenever we see it? 
+
+### 4. Creating a live dashboard with [Voilà](https://github.com/voila-dashboards/voila)
+
+Voilà has a simple premise: "*Voilà turns Jupyter notebooks into standalone web applications.*"
+
+**[Let's back up a bit, and get everything you need running in your system. First step is to have a working setup with everything above, for that, follow these instructions right here](https://github.com/duarteocarmo/interactive-dashboard-post)**.
+
+Once that is done, you should be able to launch the dashboard with:
+
+```bash
+(env) $ voila notebooks/Dashboard.ipynb
+```
+
+Now, you should be able to see a web like application in a new tab in your browser from the notebook we created! 
+
+Feel free of course to modify this notebook according to your interests. You'll notice that I have created some general variables in the first notebook cell, so you can fire up Jupyter Lab, and modify them and see what comes out!
+
+Here are the general modifiable cells:
+
+```python
+COMMENT_COLOR         = "blueviolet" 	# color for your comment graph
+SUBMISSION_COLOR      = "darkorange"	# color for your submission graph
+TEXT_PREVIEW_SIZE     = 240				# how long should the preview be? 
+TERM_OF_INTEREST      = "python"		# maybe you are interested in some other term? 
+SUBREDDIT_OF_INTEREST = "python"		# maybe you are interested in some other subreddit?
+TIMEFRAME             = "48h"			# you can define another timeline
+```
+
+Once you have modified your dashboard, you can launch Voilà again to see the results. 
+
+The most important thing about Voilà is that every time it runs, I actually re-runs your whole code, which yes, makes things a bit more slow, but also means that the results get updated every time the page is refreshed! :tada:
+
+### 5. Deploying your notebook to the web
+
 
 
 
