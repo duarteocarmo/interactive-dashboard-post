@@ -2,15 +2,21 @@
 
 [TOC]
 
+### Introduction
+I am pleased to have another guest post from [Duarte O.Carmo](https://duarteocarmo.com). He wrote 
+a [series](https://pbpython.com/papermil-rclone-report-1.html) of [posts](https://pbpython.com/papermil-rclone-report-2.html) in July on reporting generation with Papermill that were very well received. In this article, he will explore how to use [voilà](https://github.com/voila-dashboards/voila) and [plotly express](https://plot.ly/python/plotly-express/) to convert a jupyter notebook into a standalone interactive web site.
+
 ### About the author
 
 Hey everyone! My name is [Duarte O.Carmo](https://duarteocarmo.com) and I'm a Consultant working at [Jabra](https://jabra.com) that loves working with python and data. Make sure to visit my website if you want to find more about me :smile: 
 
-1. The overall goal
+For this article, I plan to cover:
+
+1. The overall goal of the project
 2. Getting the data: pushshift
-   1. Making the function
+   1. Making the function to process the data
 3. The Analysis
-   1. Comment and Submission activity activity
+   1. Comment and Submission activity
    2. Upvote tables
    3. Sentiment timeline
 4. Using voila
@@ -18,15 +24,14 @@ Hey everyone! My name is [Duarte O.Carmo](https://duarteocarmo.com) and I'm a Co
 
 ### 1. The Goal
 
-Jupyter notebooks are one of my favorite tools to work with data, they are simple to use, fast to set up, and flexible. However, they do have their disadvantages: source control, collaboration, and reproducibility are just some of them. I tend to enjoy [seing what I can accomplish with them](https://pbpython.com/papermil-rclone-report-1.html).
+Jupyter notebooks are one of my favorite tools to work with data, they are simple to use, fast to set up, and flexible. However, they do have their disadvantages: source control, collaboration, and reproducibility are just some of them. As I illustrated in my prior post, I tend to enjoy [seing what I can accomplish with them](https://pbpython.com/papermil-rclone-report-1.html).
 
 An increasing need is the sharing of our notebooks. Sure, you can export your notebooks to html, pdf, or even use something like [nbviewer](https://nbviewer.jupyter.org/) to share them. But what if your data changes constantly? What if every time you run your notebook, you expect to see something different? How can you go about sharing something like that? 
 
 > But what if your data changes constantly? What if every time you run your notebook, you expect to see something different? How can you go about sharing something like that? 
 
 
-
-In this article, I'll show you how to create a Jupyter Notebook that fetches live data, and then how to deploy it as a live dashboard. So that all you need to share with someone is a link. 
+In this article, I'll show you how to create a Jupyter Notebook that fetches live data, builds and interactive plot and then how to deploy it as a live dashboard. So that all you need to share with someone is a link. 
 
 Let's have some fun with the data first. 
 
@@ -36,7 +41,7 @@ Reddit is a tremendous source of information, and there are a million ways to ge
 
 My favorite? A small API called pushshift, to which the [documentation is right here](https://github.com/pushshift/api). 
 
-Let's say you wanted the most recent comments mentioning the word "python", then, in python, you could:
+Let's say you wanted the most recent comments mentioning the word "python". In python, you could use requests to get a json version of the data:
 
 ```python
 import requests
@@ -86,7 +91,7 @@ returns the json response. Pretty sweet right?
 
 ### 3. Analyzing the data
 
-#### 3.1. In what subreddits does the word 'python' appear more?introducing [Plotly Express](https://plot.ly/python/plotly-express/)
+#### 3.1. In what subreddits does the word 'python' appear more? Introducing [Plotly Express](https://plot.ly/python/plotly-express/)
 
 To answer the above question, we start by getting the data with our function:
 
@@ -127,7 +132,7 @@ Let's plot our results with the great [ploty express](https://nbviewer.jupyter.o
 
 - create figures quickly. :bullettrain_front:
 - create figures that are a bit more interactive than [matplotlib](https://matplotlib.org/). :raised_hand_with_fingers_splayed:
-- don't mind a bit more installation and (imo) a bit worse documentation. :sweat:
+- don't mind a bit more installation and (imo) a bit less documentation. :sweat:
 
 Here's all the code you need:
 
@@ -152,7 +157,7 @@ Yes, perhaps a bit more verbose than matplotlib, but you get an interactive char
 
 #### 3.2. What are the most up-voted comments with the word 'python'?
 
-To answer this question, our function will again come in handy, let's aggregate thinks a bit. Don't get scared, this is a one liner that will produce similar results to above:
+To answer this question, our function will again come in handy. Let's aggregate things a bit. Don't get scared, this is a one liner that will produce similar results to above:
 
 ```python
 # get the data we need using the function 
@@ -162,10 +167,10 @@ data = get_pushshift_data(data_type="comment", q="python", after="7d", size=10, 
 df = pandas.DataFrame.from_records(data)[["author", "subreddit", "score", "body", "permalink"]]
 
 # we only keep the first X characters of the body of the comment (sometimes they are too big)
-df.body = df.body.str[0:400] + "..."
+df['body'] = df['body'].str[0:400] + "..."
 
 # we append the string to all the permalink entries so that we have a link to the comment
-df.permalink = "https://reddit.com" + df.permalink.astype(str)
+df['permalink'] = "https://reddit.com" + df['permalink'].astype(str)
 
 # style the last column to be clickable and print
 df.style.format({'permalink': make_clickable})
@@ -202,7 +207,7 @@ And you can click the link column to be taken right into the comment. Hooray! :t
 
 #### 3.3. What is the sentiment in /r/python across time? introducing [TextBlob](https://textblob.readthedocs.io/en/dev/) 
 
-Alright, the final one is a bit more complicated. We want to see the sentiment in the [/r/python](https://reddit.com/r/python) subreddit in some sort of time line. 
+Alright, the final analysis is a bit more complicated. We want to see the sentiment in the [/r/python](https://reddit.com/r/python) subreddit in some sort of time line. 
 
 First, we already now how to retrieve the most up voted comments of the past 2 days:
 
@@ -285,7 +290,7 @@ And here's the output!
 
 In this view, we can see the comments made in /r/python in the last 48 hours. We can see that most comments are rather on the positive side, but some are also negative. In your own notebook you'll notice that you can hover over the comments and read the preview to see why they were classified as negative or positive. 
 
-Cool thing here is that if you run the same script tomorrow, you'll get a different output. 
+The cool thing here is that if you run the same script tomorrow, you'll get a different output. 
 
 So how can we have this in some place that "automatically" is updated whenever we see it? 
 
@@ -303,7 +308,7 @@ Once that is done, you should be able to launch the dashboard with:
 
 Now, you should be able to see a web like application in a new tab in your browser from the notebook we created! 
 
-Feel free of course to modify this notebook according to your interests. You'll notice that I have created some general variables in the first notebook cell, so you can fire up Jupyter Lab, and modify them and see what comes out!
+Feel free to modify this notebook according to your interests. You'll notice that I have created some general variables in the first notebook cell, so you can fire up Jupyter Lab, and modify them and see what comes out!
 
 Here are the general modifiable cells:
 
@@ -318,7 +323,7 @@ TIMEFRAME             = "48h"			# you can define another timeline
 
 Once you have modified your dashboard, you can launch Voilà again to see the results. 
 
-The most important thing about Voilà is that every time it runs, I actually re-runs your whole code, which yes, makes things a bit more slow, but also means that the results get updated every time the page is refreshed! :tada:
+The most important thing about Voilà is that every time it runs, it actually re-runs your whole code, which yes, makes things a bit slow, but also means that the results get updated every time the page is refreshed! :tada:
 
 ### 5. Deploying your notebook to the web
 
