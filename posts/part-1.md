@@ -283,7 +283,7 @@ So how can we have this in some place that "automatically" is updated whenever w
 
 Voilà has a simple premise: "*Voilà turns Jupyter notebooks into standalone web applications.*"
 
-**[Let's back up a bit, and get everything you need running in your system. First step is to have a working setup with everything above, for that, follow these instructions right here](https://github.com/duarteocarmo/interactive-dashboard-post)**.
+**Let's back up a bit, and get everything you need running in your system. First step is to have a working setup with everything above, for that, follow these [instructions right here](https://github.com/duarteocarmo/interactive-dashboard-post)**.
 
 Once that is done, you should be able to launch the dashboard with:
 
@@ -330,7 +330,7 @@ We don't really care about all that. We just want to publish our Voilà dashboar
 - Your dashboard will automatically launch :open_mouth: :tada: 
 - You can share the link with others and they will have access to the dashboard as well. 
 
-[Here is the running example of our reddit dashboard.](https://hub.gke.mybinder.org/user/duarteocarmo-in--dashboard-post-qzsxjbm1/voila/render/notebooks/Dashboard.ipynb?token=oChcyyPqTv2zblb6OMFoMw) 
+[Here is the running example of our reddit dashboard.](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb) (Takes a bit to build for the first time..)
 
 #### 5.2 Second Option: Using an ubuntu server in a hacky way with tmux :see_no_evil:
 
