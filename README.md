@@ -1,14 +1,14 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)[![Binder](https://img.shields.io/badge/python-v3.7-blue)]()
+[![](posts/readme_figure.png)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)
 
-# From notebook to web application
+[![](posts/readme_figure_1.png)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)
+
+# From notebook to web application :tada:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)  [![Python](https://img.shields.io/badge/python-v3.7-blue)]()
 
 
-<center>
-<img src="/home/doc/Repos/interactive-dashboard-post/posts/readme_figure.png" alt="vadsv" style="width:80%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-</center>
 
-
-#### NoteWhat is this?
+## What is this? :thinking:
 
 A blog post/tutorial for the [Practical Business Python](https://pbpython.com/) blog that teaches how to create web applications from jupyter notebooks and then deploy them. 
 
@@ -56,7 +56,7 @@ Launch [jupyter lab](https://jupyterlab.readthedocs.io/en/stable/):
 
 It should launch automatically, if not, navigate to http://localhost:8888/lab 
 
-**troubleshooting**:
+**troubleshooting**
 
 If the plotly express plots are not showing then try:
 
@@ -70,13 +70,10 @@ If you still have problems, follow [these instructions](https://plot.ly/python/g
 
 ## How do I run the dashboard? :bar_chart:
 
-Follow the instructions above, but instead of launching jupyter lab: 
+Follow the instructions above until you have the requirements installed, and then: 
 
 ```bash
 (env) $ voila notebooks/Dashboard.ipynb
 ```
 
 This should launch the dashboard in http://localhost:8866/
-
-
-
