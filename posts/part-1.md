@@ -426,6 +426,6 @@ That was a lot of stuff, and probably there are a lot of bugs in my notebook, or
 - Visit the [GitHub repo](https://github.com/duarteocarmo/interactive-dashboard-post#running-the-notebook) where both the code and post are stored.
 - If there is something wrong in the code please feel free to [submit an issue](https://github.com/duarteocarmo/interactive-dashboard-post/issues) or a [pull request](https://github.com/duarteocarmo/interactive-dashboard-post/pulls).
 - [Tweet at me if you have questions](https://twitter.com/duarteocarmo)!
-- Visit my website if you want to learn more about my work :smile:
+- Visit [my website](https://duarteocarmo.com/) if you want to learn more about my work :smile:
 
 Hope you enjoyed it! 
