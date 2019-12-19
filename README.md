@@ -2,7 +2,11 @@
 
 # From notebook to web application
 
- ![](/home/doc/Repos/interactive-dashboard-post/posts/readme_figure.png){: .shadow}
+
+<center>
+<img src="/home/doc/Repos/interactive-dashboard-post/posts/readme_figure.png" alt="vadsv" style="width:80%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+</center>
+
 
 #### NoteWhat is this?
 
