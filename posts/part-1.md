@@ -1,26 +1,11 @@
 # Creating live dashboards from Jupyter Notebooks
 
-[TOC]
-
 ### Introduction
-I am pleased to have another guest post from [Duarte O.Carmo](https://duarteocarmo.com). He wrote 
-a [series](https://pbpython.com/papermil-rclone-report-1.html) of [posts](https://pbpython.com/papermil-rclone-report-2.html) in July on reporting generation with Papermill that were very well received. In this article, he will explore how to use [voilà](https://github.com/voila-dashboards/voila) and [plotly express](https://plot.ly/python/plotly-express/) to convert a jupyter notebook into a standalone interactive web site.
+I am pleased to have another guest post from [Duarte O.Carmo](https://duarteocarmo.com). He wrote  [series](https://pbpython.com/papermil-rclone-report-1.html) of [posts](https://pbpython.com/papermil-rclone-report-2.html) in July on report generation with Papermill that were very well received. In this article, he will explore how to use [voilà](https://github.com/voila-dashboards/voila) and [plotly express](https://plot.ly/python/plotly-express/) to convert a jupyter notebook into a standalone interactive web site.
 
-### About the author
+### About Duarte 
 
-Hey everyone! My name is [Duarte O.Carmo](https://duarteocarmo.com) and I'm a Consultant working at [Jabra](https://jabra.com) that loves working with python and data. Make sure to visit my website if you want to find more about me :smile: 
-
-For this article, I plan to cover:
-
-1. The overall goal of the project
-2. Getting the data: pushshift
-   1. Making the function to process the data
-3. The Analysis
-   1. Comment and Submission activity
-   2. Upvote tables
-   3. Sentiment timeline
-4. Using voila
-5. Deploying the solution
+Hey everyone! My name is [Duarte O.Carmo](https://duarteocarmo.com) and I'm a Consultant working at [Jabra](https://jabra.com) that loves working with python and data. Make sure to visit [my website](https://duarteocarmo.com/) if you want to find more about me :smile: 
 
 ### 1. The Goal
 
@@ -39,7 +24,7 @@ Let's have some fun with the data first.
 
 Reddit is a tremendous source of information, and there are a million ways to get access to it. 
 
-My favorite? A small API called pushshift, to which the [documentation is right here](https://github.com/pushshift/api). 
+Tweet at me if you have questionsMy favorite? A small API called pushshift, to which the [documentation is right here](https://github.com/pushshift/api). 
 
 Let's say you wanted the most recent comments mentioning the word "python". In python, you could use requests to get a json version of the data:
 
@@ -327,9 +312,120 @@ The most important thing about Voilà is that every time it runs, it actually re
 
 ### 5. Deploying your notebook to the web
 
+#### 5.1 First option: Using [binder](https://mybinder.org/)
 
+Binder helps you turn a simple GitHub repo into an interactive notebook environment. They do this by using docker images to reproduce your GitHub repo's setup. 
 
+We don't really care about all that. We just want to publish our Voilà dashboard. To do that, follow these steps:
 
+- [Create a public GitHub repo](https://help.github.com/en/github/getting-started-with-github/create-a-repo)
+- Add the notebooks you want to publish as dashboards to it
+- Add a `requirements.txt` file just as I have in the [example repo](https://github.com/duarteocarmo/interactive-dashboard-post/blob/master/requirements.txt) with all of your dependencies. 
+- Go to [mybinder.org](https://mybinder.org/)
+- In the `GitHub` field add your repo's URL.
+- In the `GitHub branch, tag, or commit` field, add "master", otherwise, you probably know what you are doing. 
+- In the `Path to a notebook field ` add `/voila/render/path/to/notebook.ipynb` the `path/to/render` should be the location of your notebook in your repo. In the [example](https://github.com/duarteocarmo/interactive-dashboard-post), this results in `voila/render/notebooks/Dashboard.ipynb`
+- In the `Path to a notebook field ` toggle `URL` (instead of the default `file` option)
+- Hit `launch` 
+- Your dashboard will automatically launch :open_mouth: :tada: 
+- You can share the link with others and they will have access to the dashboard as well. 
 
+[Here is the running example of our reddit dashboard.](https://hub.gke.mybinder.org/user/duarteocarmo-in--dashboard-post-qzsxjbm1/voila/render/notebooks/Dashboard.ipynb?token=oChcyyPqTv2zblb6OMFoMw) 
 
+#### 5.2 Second Option: Using an ubuntu server in a hacky way with tmux :see_no_evil:
 
+:warning: **WARNING: This option is not 100% safe, so make sure to only use it for testing or proof of concepts, particularly if you are dealing with sensitive data!** :warning:
+
+If you want to have your dashboard running on a typical URL (such as mycooldash.com for example), you probably want to deploy it on a Linux server. 
+
+Here are the steps I used to accomplish that:
+
+- Set up your virtual private server - [this](https://www.linode.com/docs/getting-started/) Linode guide is a good start.
+- Make sure port 80 (the regular http port) is open 
+
+```shell
+$ sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+```
+
+- Once you have your repo in GitHub or somewhere else, clone it to your server. 
+
+```shell
+$ git clone https://github.com/your_username/your_awesome_repo.git
+```
+
+- You should already have python 3 installed. Try typing `python3` in your console. If that fails then [these instructions will help you](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-ubuntu-16-04).
+- Make sure you can run your dashboard, by [creating a virtual environment and installing the dependencies](https://github.com/duarteocarmo/interactive-dashboard-post#running-the-notebook). 
+- Now, if you type in your console the Voilà command, and specify the port:
+
+```shell
+(env) $ voila YourNoteBook.ipynb --port=80
+```
+
+You can probably navigate to your server's IP and see the dashboard. However, as soon as you exit your server, your dashboard will stop working. We are going to use a nifty trick with a tool called [tmux](https://en.wikipedia.org/wiki/Tmux).
+
+Tmux is a "terminal multiplexer" (wow, that's a big word). It basically allows us to create multiple terminal sessions at the same time, and then (yes you guessed it), keep them running indefinitely. If this sounds confusing, let's just get to it. 
+
+- Install tmux:
+
+```shell
+$ sudo apt-get install tmux
+```
+
+- Once installed we create a new terminal session:
+
+```shell
+$ tmux new voila
+```
+
+- You are now inside a new terminal session. Let's get voila running there.
+
+```shell
+$ cd my_repo 			# navigate to the repo
+$ . env/bin/activate	# activate the environment
+(env) $ voila MyNotebook.ipynb --port=80 # start the dashboard on port 80
+```
+
+- You should see the dashboard in your browser
+- And now, for the magic, in your terminal hit `ctrl` + `b` and then `d` on your keyboard. This will "[detach](https://www.linode.com/docs/networking/ssh/persistent-terminal-sessions-with-tmux/#attach-and-detach-from-a-tmux-session)" you from that terminal where Voilà is running.
+- You are now back to your original terminal session. Notice that your dashboard is still running. This is because your 'voila' terminal session is still running. 
+- You can see it by listing the terminal sessions with:
+
+```shell
+$ tmux ls
+```
+
+- And then attach to it via:
+
+```
+$ tmux attach voila
+```
+
+- And you'll see your Voilà logs outputting. 
+
+This is arguably a bit of a hack to have things running, but it works - so no complaints there. 
+
+Tmux is an awesome tool, and you should definitely [learn more about it here](https://www.linode.com/docs/networking/ssh/persistent-terminal-sessions-with-tmux/#attach-and-detach-from-a-tmux-session).
+
+#### 5.3 Using Heroku or Google Cloud Platform
+
+There are a million ways of deploying, and [Voilà also has good documentation on these](https://voila.readthedocs.io/en/stable/deploy.html).
+
+### 6. Conclusion
+
+That was a long post! But we are finally done! Let's summarize everything we learned:
+
+- We learned how to transform an API endpoint into a function with *kwargs
+- We learned how to analyze reddit data with python and [Plotly Express](https://plot.ly/python/plotly-express/)
+- We learned how to analyze sentiment from sentences with [TextBlob](https://textblob.readthedocs.io/en/dev/)
+- We learned how to transform a jupyter notebook into a dashboard using [Voilà](https://github.com/voila-dashboards/voila).
+- We learned how to deploy those dashboards with [Binder.org](https://mybinder.readthedocs.io/en/latest/index.html)
+- We learned how to use [tmux](https://en.wikipedia.org/wiki/Tmux) to deploy these kinds of tools in a server. 
+
+That was a lot of stuff, and probably there are a lot of bugs in my notebook, or explanation so make sure to:
+
+- Visit the [GitHub repo](https://github.com/duarteocarmo/interactive-dashboard-post#running-the-notebook) where both the code and post are stored.
+- If there is something wrong in the code please feel free to [submit an issue](https://github.com/duarteocarmo/interactive-dashboard-post/issues) or a [pull request](https://github.com/duarteocarmo/interactive-dashboard-post/pulls).
+- [Tweet at me if you have questions](https://twitter.com/duarteocarmo)!
+- Visit my website if you want to learn more about my work :smile:
+
+Hope you enjoyed it! 
