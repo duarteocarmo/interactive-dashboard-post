@@ -1,7 +1,8 @@
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)  [![Python](https://img.shields.io/badge/python-v3.7-blue)](https://www.python.org/)  [![saythanks](https://img.shields.io/badge/say-thanks-ff69b4.svg)](https://duarteocarmo.com)
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)  [![Python](https://img.shields.io/badge/python-v3.7-blue)]()
+# From notebook to web application 📔​+🔮=💥 
 
-# From notebook to web application :tada:
+[Visit the original blog post!](https://duarteocarmo.com)
 
 - [What is this? 🤔](#what-is-this-thinking)
 
@@ -9,7 +10,7 @@
 
 - [How do I run the dashboard? 📊](#how-do-i-run-the-dashboard-bar_chart)
 
-  
+
 
 [![](posts/readme_figure.png)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)
 
@@ -62,9 +63,9 @@ Launch [jupyter lab](https://jupyterlab.readthedocs.io/en/stable/):
 (env) $ jupyter lab
 ```
 
-It should launch automatically, if not, navigate to http://localhost:8888/lab 
+It should launch automatically. If not, [check this](https://jupyterlab.readthedocs.io/en/stable/getting_started/starting.html).
 
-**troubleshooting**
+🚨 **troubleshooting** 🚨
 
 If the plotly express plots are not showing then try:
 
