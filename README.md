@@ -5,26 +5,25 @@
 [Visit the original blog post!](https://duarteocarmo.com)
 
 * [What is this? 🤔](#what-is-this-thinking)
+* [Screenshots](#screenshots)
 * [How do I run the notebook? 📔](#how-do-i-run-the-notebook-notebook_with_decorative_cover)
 * [How do I run the dashboard? 📊](#how-do-i-run-the-dashboard-bar_chart)
-
-
-
-
-
-
-
-[![](posts/readme_figure.png)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)
-
-[![](posts/readme_figure_1.png)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)
 
 
 ## What is this? :thinking:
 
 A blog post/tutorial for the [Practical Business Python](https://pbpython.com/) blog that teaches how to create web applications from jupyter notebooks and then deploy them. 
 
-[Visit the dashboard](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb) (might take a bit to load because of binder)
+[Visit the live dashboard](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb) (might take a bit to load because of binder)
 
+
+
+
+## Screenshots
+
+[![](posts/readme_figure.png)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)
+
+[![](posts/readme_figure_1.png)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)
 
 
 ## How do I run the notebook? :notebook_with_decorative_cover:
