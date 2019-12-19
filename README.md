@@ -4,9 +4,16 @@
 
 [Visit the original blog post!](https://duarteocarmo.com)
 
+* [Screenshots](#screenshots)
 * [What is this? 🤔](#what-is-this-thinking)
 * [How do I run the notebook? 📔](#how-do-i-run-the-notebook-notebook_with_decorative_cover)
 * [How do I run the dashboard? 📊](#how-do-i-run-the-dashboard-bar_chart)
+
+
+
+
+
+## Screenshots
 
 [![](posts/readme_figure.png)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)
 
