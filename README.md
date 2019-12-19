@@ -1,8 +1,18 @@
-# interactive-dashboard-post
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb)[![Binder](https://img.shields.io/badge/python-v3.7-blue)]()
 
-A blog post for PBP
+# From notebook to web application
 
-## Running the notebook
+ ![](/home/doc/Repos/interactive-dashboard-post/posts/readme_figure.png){: .shadow}
+
+#### NoteWhat is this?
+
+A blog post/tutorial for the [Practical Business Python](https://pbpython.com/) blog that teaches how to create web applications from jupyter notebooks and then deploy them. 
+
+[Visit the dashboard](https://mybinder.org/v2/gh/duarteocarmo/interactive-dashboard-post/master?urlpath=%2Fvoila%2Frender%2Fnotebooks%2FDashboard.ipynb) (might take a bit to load because of binder)
+
+
+
+## How do I run the notebook? :notebook_with_decorative_cover:
 
 Clone the repo:
 
@@ -53,7 +63,8 @@ If the plotly express plots are not showing then try:
 If you still have problems, follow [these instructions](https://plot.ly/python/getting-started/#jupyterlab-support-python-35).
 
 
-## Launching the dashboard
+
+## How do I run the dashboard? :bar_chart:
 
 Follow the instructions above, but instead of launching jupyter lab: 
 
